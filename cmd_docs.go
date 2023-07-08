@@ -71,6 +71,7 @@ func DocsHelp(ctx DocsCommandContext) error {
 
 	// Obtain prompt, setup Project, URL, Payload
 	prompt := ctx.Prompt
+
 	//Check for Project and API URL, fail if no value set
 	project, exists := os.LookupEnv("RELEVANCE_PROJECT")
 	if !exists {
@@ -82,17 +83,10 @@ func DocsHelp(ctx DocsCommandContext) error {
 		return nil
 	}
 
-	// we just want to send an empty string for chat history right now to use the chain
-	payload := payload{
-		Params: question{
-			Question: prompt,
-			ChatHistory: []string{
-				"",
-			},
-		},
-		Project: project,
+	payload, err := constructPayload(prompt, project)
+	if (err != nil){
+		log.Errorf("🚨 Error creating Relevance AI payload: %v", err)
 	}
-
 
 	debugf("Are we sending the question properly?\n %s \n what about the payload:\n %v", payload.Params.Question, payload)
 	payloadBytes, err := json.Marshal(payload)
@@ -144,4 +138,19 @@ func DocsHelp(ctx DocsCommandContext) error {
 
 	fmt.Print(out)
 	return nil
+}
+
+func constructPayload(prompt, project string) (payload, error) {
+	// Construct payload
+	payload := payload{
+		Params: question{
+			Question: prompt,
+			ChatHistory: []string{
+				"",
+			},
+		},
+		Project: project,
+	}
+
+	return payload, nil
 }
