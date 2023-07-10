@@ -2,6 +2,8 @@ agents:
   queue: localdev
   
 steps:
-  - label: "echo"
-    command: |
-      echo "BK Support CLI"
+  - name: "Lint"
+    command: ".buildkite/steps/lint.sh"
+    plugins:
+      docker#v3.5.0:
+        image: "golang:1.20"
