@@ -34,7 +34,6 @@ type question struct {
 	ChatHistory []string `json:"chat_history"`
 }
 
-
 type response struct {
 	Output    output    `json:"output"`
 }
