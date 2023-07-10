@@ -1,0 +1,7 @@
+agents:
+  queue: localdev
+  
+steps:
+  - label: "echo"
+    command: |
+      echo "BK Support CLI"
